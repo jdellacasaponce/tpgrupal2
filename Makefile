@@ -1,6 +1,6 @@
 BIN = Programa
 OBJ = main.o afd.o
-CFLAGS = -std=c23 -Weverything
+CFLAGS = -std=c23
 RM = rm -f
 CC = gcc
 
