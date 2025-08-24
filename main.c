@@ -1,23 +1,52 @@
+#include "afd.h"
 #include <stdio.h>
-#include <stdlib.h>
+
+#define MAX_PALABRA 256
 
 int main(int argc, char *argv[]) {
-    
-    FILE *archivo;
-    char buffer[100];
-    
-    if (argc!=2) {
-        printf("Cantidad de argumentos inválida");
-        return 0;
+  if (argc != 2) {
+    fprintf(stderr, "Uso: %s archivo.txt\n", argv[0]);
+    return 1;
+  }
+
+  FILE *fp = fopen(argv[1], "r");
+  if (!fp) {
+    perror("Error al abrir archivo");
+    return 1;
+  }
+
+  char palabra[MAX_PALABRA];
+  int indice = 0;
+  int estado = Q0;
+  int c;
+
+  while ((c = getc(fp)) != EOF) {
+    if (c == ',' || c == '\n') {
+      palabra[indice] = '\0'; // cerrar string
+      if (indice > 0) {
+        if (es_final(estado))
+          printf("%s -> VALIDA\n", palabra);
+        else
+          printf("%s -> INVALIDA\n", palabra);
+      }
+      // reiniciar
+      indice = 0;
+      estado = Q0;
+    } else if (c != ' ' && c != '\t') { // ignorar espacios
+      palabra[indice++] = (char)c;
+      estado = mover(estado, c);
     }
+  }
 
-    archivo = fopen(argv[1], "r");
+  // Última palabra si no termina con coma
+  if (indice > 0) {
+    palabra[indice] = '\0';
+    if (es_final(estado))
+      printf("%s -> VALIDA\n", palabra);
+    else
+      printf("%s -> INVALIDA\n", palabra);
+  }
 
-    while (fgets(buffer, sizeof(buffer), archivo) != NULL) {
-        printf("%s", buffer);
-    }
-
-    fclose(archivo);
-
-    return 0;
+  fclose(fp);
+  return 0;
 }
