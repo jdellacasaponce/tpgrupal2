@@ -2,6 +2,7 @@
 #define AFD_H
 #define NUM_ESTADOS 7
 #define NUM_CLASES 6
+#define MAX_PALABRA 256
 
 enum { Q0, Q1, Q2, Q3, Q4, Q5, ERROR };
 

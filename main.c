@@ -1,8 +1,6 @@
 #include "afd.h"
 #include <stdio.h>
 
-#define MAX_PALABRA 256
-
 int main(int argc, char *argv[]) {
   if (argc != 2) {
     fprintf(stderr, "Uso: %s archivo.txt\n", argv[0]);
